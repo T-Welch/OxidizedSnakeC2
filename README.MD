@@ -1,0 +1,1 @@
+Open Soruce - Educational - C2 Server with the server written in Python Flask and the clients written in Rust
