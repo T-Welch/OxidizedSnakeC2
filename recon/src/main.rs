@@ -69,8 +69,4 @@ async fn main() -> Result<(), Error> {
     println!("{}", the_system);
     post_hello().await?;
     Ok(())
-
-    
-
-    
 }
