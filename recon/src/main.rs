@@ -1,12 +1,14 @@
 //src/main.rs
 mod host_system;
 use std::net::IpAddr;
+use host_system::HostSystem;
 use sysinfo::{NetworkData, Networks, System};
 use serde::Serialize;
 use core::net::Ipv4Addr;
 use serde_json::json;
 use crate::host_system::HostSystemBuilder;
 use reqwest::{Client, Error};
+use std::fmt;
 
 
 async fn fetch_cpu_vendors(sys: &System) -> Vec<String> {
@@ -41,9 +43,26 @@ async fn post_hello() -> Result<(), Error> {
 }
 
 
-#[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn post_json_to_pre_configured_server(url: &str, json_data: &str) -> Result<(), Error> {
+    let client = reqwest::Client::new();
 
+    let response = client
+        .post(url)
+        .header("Content-Type", "application/json")
+        .body(json_data.to_owned())
+        .send()
+        .await?;
+
+    println!("Status: {}", response.status());
+    let response_body = response.text().await?;
+    println!("Response body:\n{}", response_body);
+    Ok(())
+}
+
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let url = "http://127.0.0.1:5000/client-hello";
     let mut sys = System::new_all();
     let networks = sysinfo::Networks::new_with_refreshed_list();
     let mut ip_addresses: Vec<IpAddr> = Vec::new();
@@ -67,6 +86,8 @@ async fn main() -> Result<(), Error> {
     local_host_system.network_count(1);
     let the_system = local_host_system.build();
     println!("{}", the_system);
+    let json_data = serde_json::to_string(&the_system)?;
+    post_json_to_pre_configured_server(url, &json_data).await?;
     post_hello().await?;
     Ok(())
 }
