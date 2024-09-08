@@ -8,3 +8,4 @@ class HostSystem(db.Model):
     ip_address = db.Column(db.String(255))
     ip_prefix = db.Column(db.Integer)
     network_count = db.Column(db.Integer)
+    timestamp = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())

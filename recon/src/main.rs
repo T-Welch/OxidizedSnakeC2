@@ -1,12 +1,14 @@
 //src/main.rs
-mod host_system;
+mod sys_monitoring_reporting {
+    pub mod host_system;
+}
+
+use sys_monitoring_reporting::host_system::{HostSystem, HostSystemBuilder};
 use std::net::IpAddr;
-use host_system::HostSystem;
 use sysinfo::{NetworkData, Networks, System};
 use serde::Serialize;
 use core::net::Ipv4Addr;
 use serde_json::json;
-use crate::host_system::HostSystemBuilder;
 use reqwest::{Client, Error};
 use std::fmt;
 
@@ -88,6 +90,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", the_system);
     let json_data = serde_json::to_string(&the_system)?;
     post_json_to_pre_configured_server(url, &json_data).await?;
-    post_hello().await?;
     Ok(())
 }
