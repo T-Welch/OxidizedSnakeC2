@@ -4,10 +4,9 @@ mod sys_monitoring_reporting {
 }
 
 use sys_monitoring_reporting::host_system::{HostSystem, HostSystemBuilder};
-use std::net::IpAddr;
+use std::net::{IpAddr, Ipv4Addr};
 use sysinfo::{NetworkData, Networks, System};
 use serde::Serialize;
-use core::net::Ipv4Addr;
 use serde_json::json;
 use reqwest::{Client, Error};
 use std::fmt;
@@ -69,11 +68,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let networks = sysinfo::Networks::new_with_refreshed_list();
     let mut ip_addresses: Vec<IpAddr> = Vec::new();
 
-    for (interface_name, network )in networks.iter() {
-        println!("Ip Networks: {:?}", network.ip_networks());
+    for (interface_name, network) in networks.iter() {
+        // println!("{:?}: {:?}", interface_name, network.ip_networks());
         for ip_network in network.ip_networks() {
-            ip_addresses.push(ip_network.addr);
+            if let IpAddr::V4(ipv4_addr) = ip_network.addr {
+                ip_addresses.push(IpAddr::V4(ipv4_addr));
+            }
         }
+        println!("\n\n {:?}", ip_addresses);
     }
 
     sys.refresh_all();
