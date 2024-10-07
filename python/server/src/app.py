@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, redirect, url_for, render_template
 from http import HTTPStatus
 from models import db, HostSystem
 
-
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataschmace.db'
 db.init_app(app)
@@ -11,6 +10,11 @@ db.init_app(app)
 def index():
     return render_template('index.html')
 
+@app.route('/clear-database', methods=['GET'])
+def delete_database():
+    db.drop_all()
+    db.create_all()
+    return redirect(url_for('client_hello'))
 
 
 @app.route('/client-hello', methods=['POST'])
@@ -25,26 +29,30 @@ def client_hello():
             ip_address=data.get('ip_address'),
             ip_prefix=data.get('ip_prefix'),
             network_count=data.get('network_count')
+            
         )
         db.session.add(host_system)
         db.session.commit()
+        print(host_system)
         return jsonify({'status': 'success'}), HTTPStatus.CREATED
     except Exception as e:
         return jsonify({'error': str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-
 @app.route('/client-hello', methods=['GET'])
 def get_client_hello():
-    print(db.session.query(HostSystem).all())
-    host_system = db.session.query(HostSystem).filter(HostSystem.id == 1).first()
-    if host_system:
-        print(f"CPU Vendor: {host_system.cpu_vendor}")
-        print(f"IP Address: {host_system.ip_address}")
-        print(f"IP Prefix: {host_system.ip_prefix}")
-        print(f"Network Count: {host_system.network_count}")
-    else:
-        print("Host system not found")
-    return "Okay then", HTTPStatus.METHOD_NOT_ALLOWED
+    host_systems = db.session.query(HostSystem).all()
+    host_systems_list = [
+        {
+            "id": host_system.id,
+            "cpu_vendor": host_system.cpu_vendor,
+            "ip_address": host_system.ip_address,
+            "ip_prefix": host_system.ip_prefix,
+            "network_count": host_system.network_count,
+            "timestamp": host_system.timestamp
+        }
+        for host_system in host_systems
+    ]
+    return jsonify(host_systems_list), HTTPStatus.OK
     
 
 if __name__ == '__main__':

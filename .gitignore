@@ -5,3 +5,5 @@ venv/
 .venv/
 Cargo.lock
 python/server/src/__pycache__/
+*.db
+resource/

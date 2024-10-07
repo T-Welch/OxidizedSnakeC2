@@ -1,1 +1,1 @@
-Open Soruce - Educational - C2 Server with the server written in Python Flask and the clients written in Rust
+Open Soruce - Educational - ~~C2 Server~~ RMM (Remote monitoring and management) software with the server written in Python with flask and the clients written in Rust
