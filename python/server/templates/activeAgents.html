@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- PicoCSS -->
+    <link href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Brand</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 4</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mt-5">
+        <!-- Section 1 -->
+        <section>
+            <h1>first section</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo nec libero fermentum, a tincidunt nisi facilisis.</p>
+        </section>
+
+        <!-- Section 2 -->
+        <section>
+            <h2>What about second section?</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo nec libero fermentum, a tincidunt nisi facilisis.</p>
+        </section>
+
+        <!-- Section 3 -->
+        <section>
+            <h2>And elevensies</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque leo nec libero fermentum, a tincidunt nisi facilisis.</p>
+        </section>
+
+        <!-- Empty Tables -->
+        <section>
+            <h2>Data Tables</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Header 1</th>
+                            <th scope="col">Header 2</th>
+                            <th scope="col">Header 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows to be populated -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Header 1</th>
+                            <th scope="col">Header 2</th>
+                            <th scope="col">Header 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows to be populated -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
