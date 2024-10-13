@@ -53,6 +53,33 @@ def get_client_hello():
         for host_system in host_systems
     ]
     return jsonify(host_systems_list), HTTPStatus.OK
+
+@app.route('/playground', methods=['GET'])
+def playground():
+    return render_template('playground.html')
+
+@app.route('/generate-agent', methods=['GET'])
+def generate_agent():   
+    return
+    
+@app.route('/get-all-agents', methods=['GET'])
+def get_all_agents():
+    host_systems = db.session.query(HostSystem).all()
+    host_systems_list = [
+        {
+            "id": host_system.id,
+            "cpu_vendor": host_system.cpu_vendor,
+            "ip_address": host_system.ip_address,
+            "ip_prefix": host_system.ip_prefix,
+            "network_count": host_system.network_count,
+            "timestamp": host_system.timestamp
+        }
+        for host_system in host_systems
+    ]
+    return jsonify({"agents": host_systems_list}), HTTPStatus.OK
+    
+    
+    
     
 
 if __name__ == '__main__':

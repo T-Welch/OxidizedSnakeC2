@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- Other head elements -->
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- PicoCSS -->
+    <link href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Brand</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Page 4</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+        <section>
+            <h2>Data Tables</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Header 1</th>
+                            <th scope="col">Header 2</th>
+                            <th scope="col">Header 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Generate Agent</td>
+                            <td><button id="generateButton">Generate</button></td>
+                            <td><button>Download Agent</button></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>View Clients</td>
+                            <td><button id="populateAgentsButton">show clients</button></td>
+                            <td></td>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" id="agent-display-table" style="display: none;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">CPU Vendor</th>
+                            <th scope="col">IP Address</th>
+                            <th scope="col">IP Prefix</th>
+                            <th scope="col">Network Count</th>
+                            <th scope="col">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agent-table-body">
+                        <!-- Rows to be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function() {
+            fetch('/generate-agent', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('populateAgentsButton').addEventListener('click', function() {
+            fetch('/get-all-agents', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                
+                // Check if data contains agents
+                if (!data.hasOwnProperty('agents')) {
+                    throw new Error('Response does not contain agents');
+                }
+
+                const agents = data['agents'];
+                const tableBody = document.getElementById('agent-table-body');
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                agents.forEach((agent, index) => {
+                    const row = document.createElement('tr');
+                    
+                    // Create ID cell
+                    const idCell = document.createElement('td');
+                    idCell.textContent = index + 1;
+                    row.appendChild(idCell);
+
+                    // Create cells for each key-value pair
+                    for (const key in agent) {
+                        if (agent.hasOwnProperty(key)) {
+                            const cell = document.createElement('td');
+                            cell.textContent = agent[key];
+                            row.appendChild(cell);
+                        }
+                    }
+
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate data reception
+            function fetchData() {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true); // Simulate data received
+                    }, 2000); // Simulate a delay
+                });
+            }
+
+            fetchData().then((dataReceived) => {
+                if (dataReceived) {
+                    document.getElementById('agent-display-table').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
