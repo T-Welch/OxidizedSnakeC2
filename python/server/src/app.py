@@ -77,6 +77,14 @@ def get_all_agents():
         for host_system in host_systems
     ]
     return jsonify({"agents": host_systems_list}), HTTPStatus.OK
+
+@app.route('/command-queue', methods=['GET'])
+def command_queue():
+    
+    
+    return jsonify({"commands": []}), HTTPStatus.OK
+    
+    
     
     
     
